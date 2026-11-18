@@ -1,0 +1,116 @@
+=== 1) Creation de comptes (Builder + Prototype du Travail 1) -> evenement CREATED ===
+[EMAIL] a ali@univ.dz : Votre compte a ete cree. Il attend son activation.
+[EMAIL] a nadia@univ.dz : Votre compte a ete cree. Il attend son activation.
+[EMAIL] a rida@univ.dz : Votre compte a ete cree. Il attend son activation.
+
+=== 2) STATE : cycle de vie d'un compte ===
+Connexion (PENDING)   : false
+[EMAIL] a ali@univ.dz : Votre compte est actif.
+Connexion (ACTIVE)    : true
+[EMAIL] a ali@univ.dz : Votre compte a ete suspendu.
+Connexion (SUSPENDED) : false
+[EMAIL] a ali@univ.dz : Votre compte est actif.
+[EMAIL] a ali@univ.dz : Votre compte a ete ferme.
+Statut final           : CLOSED
+Refuse : Operation 'activate' interdite : le compte est CLOSED
+[EMAIL] a nadia@univ.dz : Votre compte est actif.
+[EMAIL] a rida@univ.dz : Votre compte est actif.
+[EMAIL] a rida@univ.dz : Votre compte a ete suspendu.
+
+=== 3) ADAPTER : import depuis le systeme legacy -> evenement IMPORTED ===
+[EMAIL] a y.bensalem@old.univ.dz : Votre ancien compte a ete importe dans le nouveau systeme.
+[EMAIL] a n.ouali@old.univ.dz : Votre ancien compte a ete importe dans le nouveau systeme.
+[EMAIL] a y.rida@old.univ.dz : Votre ancien compte a ete importe dans le nouveau systeme.
+[EMAIL] a ali@old.univ.dz : Votre ancien compte a ete importe dans le nouveau systeme.
+[EMAIL] a mostapha@old.univ.dz : Votre ancien compte a ete importe dans le nouveau systeme.
+[EMAIL] a laila@old.univ.dz : Votre ancien compte a ete importe dans le nouveau systeme.
+[EMAIL] a y.aicha@old.univ.dz : Votre ancien compte a ete importe dans le nouveau systeme.
+[EMAIL] a hoda@old.univ.dz : Votre ancien compte a ete importe dans le nouveau systeme.
+[EMAIL] a h.aoun@old.univ.dz : Votre ancien compte a ete importe dans le nouveau systeme.
+Comptes importes : 9
+Lignes refusees  : 1
+   ! 19990008;SALEM;Bahi;y.salem@old.univ.dz;L3  ->  id en double dans l'ancien systeme
+
+=== 4) COMPOSITE : arbre de l'universite ===
+UNIVERSITE Universite (6 comptes)
+   FACULTE Faculte des Sciences (5 comptes)
+      DEPARTEMENT Informatique (4 comptes)
+         GROUPE Groupe 1 (2 comptes)
+            - Nadia Ouali [ACTIVE]
+            - Rida Benbordi [SUSPENDED]
+         GROUPE Groupe 2 (2 comptes)
+            - Yacine BENSALEM [PENDING]
+            - Nadia OUALI [PENDING]
+      DEPARTEMENT Mathematiques (1 comptes)
+         GROUPE Groupe 1 (1 comptes)
+            - Rida BENBORDI [PENDING]
+   FACULTE Faculte de Droit (1 comptes)
+      DEPARTEMENT Droit prive (1 comptes)
+         GROUPE Groupe 1 (1 comptes)
+            - Ali ALI [PENDING]
+Total universite : 6 comptes
+
+=== 5) DECORATOR : services supplementaires ===
+20240001 : Compte de base  (0.0 DA/mois)
+20240101 : Compte de base + Bibliotheque  (500.0 DA/mois)
+20240102 : Compte de base + Bibliotheque + Restaurant + Internet  (4500.0 DA/mois)
+
+=== 6) STRATEGY : export CSV puis JSON ===
+--- CSV ---
+id,name,level,status
+20240001,Ali Ben,L2,CLOSED
+20240101,Nadia Ouali,L3,ACTIVE
+20240102,Rida Benbordi,L3,SUSPENDED
+19990001,Yacine BENSALEM,L3,PENDING
+19990002,Nadia OUALI,M1,PENDING
+19990003,Rida BENBORDI,L1,PENDING
+19990004,Ali ALI,M2,PENDING
+19990005,Mostapha ALLA,L1,PENDING
+19990006,Laila OUALI,M1,PENDING
+19990007,Aicha BENALI,L2,PENDING
+19990008,Hoda TRIQUI,M2,PENDING
+19990010,Hama AOUN,M1,PENDING
+
+--- JSON ---
+[
+  {"id":"20240001","name":"Ali Ben","level":"L2","status":"CLOSED"},
+  {"id":"20240101","name":"Nadia Ouali","level":"L3","status":"ACTIVE"},
+  {"id":"20240102","name":"Rida Benbordi","level":"L3","status":"SUSPENDED"},
+  {"id":"19990001","name":"Yacine BENSALEM","level":"L3","status":"PENDING"},
+  {"id":"19990002","name":"Nadia OUALI","level":"M1","status":"PENDING"},
+  {"id":"19990003","name":"Rida BENBORDI","level":"L1","status":"PENDING"},
+  {"id":"19990004","name":"Ali ALI","level":"M2","status":"PENDING"},
+  {"id":"19990005","name":"Mostapha ALLA","level":"L1","status":"PENDING"},
+  {"id":"19990006","name":"Laila OUALI","level":"M1","status":"PENDING"},
+  {"id":"19990007","name":"Aicha BENALI","level":"L2","status":"PENDING"},
+  {"id":"19990008","name":"Hoda TRIQUI","level":"M2","status":"PENDING"},
+  {"id":"19990010","name":"Hama AOUN","level":"M1","status":"PENDING"}
+]
+
+=== 7) OBSERVER : tableau de bord et journal d'audit ===
+=== Tableau de bord admin ===
+CREATED    : 3
+ACTIVATED  : 4
+SUSPENDED  : 2
+CLOSED     : 1
+IMPORTED   : 9
+--- Journal d'audit (12 comptes) ---
+2026-11-18T10:51:53 | CREATED 20240001
+2026-11-18T10:51:53 | CREATED 20240101
+2026-11-18T10:51:53 | CREATED 20240102
+2026-11-18T10:51:53 | ACTIVATED 20240001
+2026-11-18T10:51:53 | SUSPENDED 20240001
+2026-11-18T10:51:53 | ACTIVATED 20240001
+2026-11-18T10:51:53 | CLOSED 20240001
+2026-11-18T10:51:53 | ACTIVATED 20240101
+2026-11-18T10:51:53 | ACTIVATED 20240102
+2026-11-18T10:51:53 | SUSPENDED 20240102
+2026-11-18T10:51:53 | IMPORTED 19990001
+2026-11-18T10:51:53 | IMPORTED 19990002
+2026-11-18T10:51:53 | IMPORTED 19990003
+2026-11-18T10:51:53 | IMPORTED 19990004
+2026-11-18T10:51:53 | IMPORTED 19990005
+2026-11-18T10:51:53 | IMPORTED 19990006
+2026-11-18T10:51:53 | IMPORTED 19990007
+2026-11-18T10:51:53 | IMPORTED 19990008
+2026-11-18T10:51:53 | IMPORTED 19990010
